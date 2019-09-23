@@ -7,5 +7,20 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="User Data Source -" uuid="ddbef543-2667-45bb-9512-bcdf645b0f2f">
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>java.sql.Driver</jdbc-driver>
+    </data-source>
+    <data-source source="LOCAL" name="jdbc:postgresql://ec2-54-217-225-16.eu-west-1.compute.amazonaws.com :5432/d19oo3ef47p7ao" uuid="7fcaa1a7-fc93-4a23-b523-ab3192db8be5">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ec2-54-217-225-16.eu-west-1.compute.amazonaws.com :5432/d19oo3ef47p7ao</jdbc-url>
+      <driver-properties>
+        <property name="ssl" value="true" />
+        <property name="sslfactory" value="org.postgresql.ssl.NonValidatingFactory" />
+      </driver-properties>
+    </data-source>
   </component>
 </project>

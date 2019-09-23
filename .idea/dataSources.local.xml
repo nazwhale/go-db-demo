@@ -15,5 +15,16 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="User Data Source -" uuid="ddbef543-2667-45bb-9512-bcdf645b0f2f">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="UNKNOWN" exact-version="0" />
+      <secret-storage>master_key</secret-storage>
+      <schema-mapping />
+    </data-source>
+    <data-source name="jdbc:postgresql://ec2-54-217-225-16.eu-west-1.compute.amazonaws.com :5432/d19oo3ef47p7ao" uuid="7fcaa1a7-fc93-4a23-b523-ab3192db8be5">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" exact-version="0" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>jluiokridztech</user-name>
+      <schema-mapping />
+    </data-source>
   </component>
 </project>
