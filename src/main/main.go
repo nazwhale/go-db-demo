@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -42,17 +43,13 @@ func main() {
 
 	fmt.Println("opened db", db)
 
+
+	fmt.Println("about to ping...")
+	err = db.Ping()
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
-
-	fmt.Println("about to ping...")
-	err = db.Ping()
-
-	if err != nil {
-		panic(err)
-	}
 	fmt.Println("ping successful! 💥")
 
 	fmt.Println("listing restaurants...")
