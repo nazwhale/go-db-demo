@@ -35,3 +35,4 @@
 
 [metadata.heroku]
   root-package = "github.com/personal-projects/postgres-play"
+  go-version = "1.12.9"
