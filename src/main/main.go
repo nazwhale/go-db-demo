@@ -4,18 +4,19 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	_ "github.com/lib/pq"
 )
 
 //const (
-	//host   = "localhost"
-	//port   = 5432
-	//user   = "postgres"
-	//instanceIP = "35.195.243.62"
-	//password = "cabbages"
-	//dbname = "london-restaurants"
+//host   = "localhost"
+//port   = 5432
+//user   = "postgres"
+//instanceIP = "35.195.243.62"
+//password = "cabbages"
+//dbname = "london-restaurants"
 
 //	host     = "ec2-54-217-225-16.eu-west-1.compute.amazonaws.com"
 //	dbName   = "d19oo3ef47p7ao"
@@ -26,23 +27,36 @@ import (
 //)
 
 func main() {
-	//psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"dbname=%s sslmode=disable", host, port, user, dbname)
-	//psqlInfo := fmt.Sprintf("user=%s dbname=%s hostaddr=%s password=%s sslmode=disable", user , user, instanceIP, password)
+	http.HandleFunc("/", handler)
+	fmt.Println("listening...")
+	err := http.ListenAndServe(GetPort(), nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
 
-	//psqlInfo := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable",
-	//	instanceIP,
-	//	user,
-	//	password,
-	//	dbname)
-	//db, err := sql.Open("postgres", psqlInfo)
+func handler(w http.ResponseWriter, r *http.Request) {
+	_, _ = fmt.Fprintf(w, "Hello. This is our first Go web app on Heroku!")
+}
 
+// Get the Port from the environment so we can run on Heroku
+func GetPort() string {
+	var port = os.Getenv("PORT")
+	// Set a default port if there is nothing in the environment
+	if port == "" {
+		port = "4747"
+		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
+	}
+	return ":" + port
+}
+
+func dbInit() {
 	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println("opened db", db)
-
 
 	fmt.Println("about to ping...")
 	err = db.Ping()
