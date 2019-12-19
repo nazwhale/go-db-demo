@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd02ad2c-f305-430a-bfe9-60b40e9f2b09" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dbc5a56c-309c-435d-9561-fafb42e86339.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/dbc5a56c-309c-435d-9561-fafb42e86339.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/main.go" afterDir="false" />
     </list>
@@ -64,19 +65,17 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="go build github.com/personal-projects/postgres-play/main" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build github.com/personal-projects/postgres-play/src/main" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
       <module name="postgres-play" />
-      <working_directory value="$PROJECT_DIR$/" />
+      <working_directory value="$PROJECT_DIR$" />
+      <envs>
+        <env name="DATABASE_URL" value="postgres://naz:cabbages@localhost:5432/london_restaurants?sslmode=disable" />
+      </envs>
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/main/main.go" />
-      <package value="github.com/personal-projects/postgres-play/main" />
+      <package value="github.com/personal-projects/postgres-play/src/main" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Go Build.go build github.com/personal-projects/postgres-play/main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="allServicesViewState">

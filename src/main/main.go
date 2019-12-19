@@ -3,37 +3,73 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
+	"github.com/lib/pq"
 	"net/http"
 	"os"
 
 	_ "github.com/lib/pq"
 )
 
-//const (
-//host   = "localhost"
-//port   = 5432
-//user   = "postgres"
-//instanceIP = "35.195.243.62"
-//password = "cabbages"
-//dbname = "london-restaurants"
 
-//	host     = "ec2-54-217-225-16.eu-west-1.compute.amazonaws.com"
-//	dbName   = "d19oo3ef47p7ao"
-//	user     = "jluiokridztech"
-//	port     = "5432"
-//	password = "5faae49acd2a0c16bf72aedc7a033df6635fe8b21f7dcc28ec5369cc1e8aa13e"
-//	uri      = "postgres://jluiokridztech:5faae49acd2a0c16bf72aedc7a033df6635fe8b21f7dcc28ec5369cc1e8aa13e@ec2-54-217-225-16.eu-west-1.compute.amazonaws.com:5432/d19oo3ef47p7ao"
-//)
+const (
+host   = "localhost"
+port   = 5432
+user   = "naz"
+password = "cabbages"
+dbname = "london-restaurants"
+connectionStr =	"postgres://naz:cabbages@localhost:5432/london-restaurants?sslmode=disable"
+
+
+
+
+	//host     = "ec2-54-217-225-16.eu-west-1.compute.amazonaws.com"
+	//dbName   = "d19oo3ef47p7ao"
+	//user     = "jluiokridztech"
+	//port     = "5432"
+	//password = "5faae49acd2a0c16bf72aedc7a033df6635fe8b21f7dcc28ec5369cc1e8aa13e"
+	//uri      = "postgres://jluiokridztech:5faae49acd2a0c16bf72aedc7a033df6635fe8b21f7dcc28ec5369cc1e8aa13e@ec2-54-217-225-16.eu-west-1.compute.amazonaws.com:5432/d19oo3ef47p7ao"
+)
 
 func main() {
 	http.HandleFunc("/", handler)
-	fmt.Println("listening...")
-	err := http.ListenAndServe(GetPort(), nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+
+	//fmt.Println("listening...")
+	//err := http.ListenAndServe(GetPort(), nil)
+	//if err != nil {
+	//	log.Fatal("ListenAndServe: ", err)
+	//}
+
+	dbInit()
 }
+
+
+func dbInit()  {
+	connectionURL := os.Getenv("DATABASE_URL")
+	parsed, err := pq.ParseURL(connectionURL)
+	fmt.Println(connectionURL)
+	fmt.Println(err)
+	fmt.Println(parsed)
+
+	// see if we can pass through one big database connection string
+	db, err := sql.Open("postgres", connectionURL)
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	listRestaurants(db,10)
+
+	fmt.Println("Successfully connected!")
+	return
+}
+
+
+// ------------------------
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, "Hello. This is our first Go web app on Heroku!")
@@ -50,43 +86,20 @@ func GetPort() string {
 	return ":" + port
 }
 
-func dbInit() {
-	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("opened db", db)
-
-	fmt.Println("about to ping...")
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-	fmt.Println("ping successful! 💥")
-
-	fmt.Println("listing restaurants...")
-	listRestaurants(db, 5)
-	fmt.Println("listed restaurants ✅")
-}
 
 type Restaurant struct {
 	ID       int
 	Name     string
-	Area     string
-	ImageURL string
-	Cuisine  string
 }
 
-func createRestaurant(db *sql.DB) {
+func createRestaurant(db *sql.DB, name string) {
 	sqlStatement := `
-INSERT INTO restaurants (name, area, image_url, cuisine)
-VALUES ($1, $2, $3, $4)
+INSERT INTO restaurants (name)
+VALUES ($1)
 RETURNING id`
 
 	var restaurant Restaurant
-	err := db.QueryRow(sqlStatement, "Kebab Man", "Holloway", "https://www.toconoco.com/wp-content/uploads/Toconoco-inside.jpg", "Korean").Scan(&restaurant.ID)
+	err := db.QueryRow(sqlStatement, name).Scan(&restaurant.ID)
 	if err != nil {
 		panic(err)
 	}
@@ -102,7 +115,7 @@ WHERE id = $1;`
 
 	var restaurant Restaurant
 	row := db.QueryRow(sqlStatement, restaurantID)
-	switch err := row.Scan(&restaurant.ID, &restaurant.Name, &restaurant.Area, &restaurant.ImageURL, &restaurant.Cuisine); err {
+	switch err := row.Scan(&restaurant.ID, &restaurant.Name); err {
 	case sql.ErrNoRows:
 		fmt.Println("No rows returned!")
 	case nil:
@@ -128,7 +141,7 @@ LIMIT $1;`
 
 	for rows.Next() {
 		var restaurant Restaurant
-		err = rows.Scan(&restaurant.ID, &restaurant.Name, &restaurant.Area, &restaurant.ImageURL, &restaurant.Cuisine)
+		err = rows.Scan(&restaurant.ID, &restaurant.Name)
 		if err != nil {
 			panic(err)
 		}
