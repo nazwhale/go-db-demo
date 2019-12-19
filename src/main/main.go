@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/lib/pq"
+	"log"
 	"net/http"
 	"os"
 
@@ -19,22 +20,16 @@ password = "cabbages"
 dbname = "london-restaurants"
 connectionStr =	"postgres://naz:cabbages@localhost:5432/london-restaurants?sslmode=disable"
 
-	//host     = "ec2-54-217-225-16.eu-west-1.compute.amazonaws.com"
-	//dbName   = "d19oo3ef47p7ao"
-	//user     = "jluiokridztech"
-	//port     = "5432"
-	//password = "5faae49acd2a0c16bf72aedc7a033df6635fe8b21f7dcc28ec5369cc1e8aa13e"
-	//uri      = "postgres://jluiokridztech:5faae49acd2a0c16bf72aedc7a033df6635fe8b21f7dcc28ec5369cc1e8aa13e@ec2-54-217-225-16.eu-west-1.compute.amazonaws.com:5432/d19oo3ef47p7ao"
 )
 
 func main() {
 	http.HandleFunc("/", handler)
 
-	//fmt.Println("listening...")
-	//err := http.ListenAndServe(GetPort(), nil)
-	//if err != nil {
-	//	log.Fatal("ListenAndServe: ", err)
-	//}
+	fmt.Println("listening...")
+	err := http.ListenAndServe(GetPort(), nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
 
 	dbInit()
 }
