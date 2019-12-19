@@ -19,9 +19,6 @@ password = "cabbages"
 dbname = "london-restaurants"
 connectionStr =	"postgres://naz:cabbages@localhost:5432/london-restaurants?sslmode=disable"
 
-
-
-
 	//host     = "ec2-54-217-225-16.eu-west-1.compute.amazonaws.com"
 	//dbName   = "d19oo3ef47p7ao"
 	//user     = "jluiokridztech"
