@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-
 	http.HandleFunc("/", handler.HandleRoot)
 	http.HandleFunc("/restaurants/list", handler.HandleListRestaurants)
 
@@ -21,32 +20,6 @@ func main() {
 		log.Fatal("ListenAndServe error: ", err)
 	}
 }
-
-
-func DbInit() *sql.DB {
-	connectionURL := os.Getenv("DATABASE_URL")
-
-	// see if we can pass through one big database connection string
-	db, err := sql.Open("postgres", connectionURL)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-
-	listRestaurants(db,10)
-
-	fmt.Println("Successfully connected!")
-	return db
-}
-
-
-// ------------------------
-
 
 // Get the Port from the environment so we can run on Heroku
 func GetPort() string {
@@ -59,6 +32,7 @@ func GetPort() string {
 	return ":" + port
 }
 
+// ---------------------
 
 type Restaurant struct {
 	ID       int
@@ -94,35 +68,6 @@ WHERE id = $1;`
 	case nil:
 		fmt.Println(restaurant)
 	default:
-		panic(err)
-	}
-}
-
-func listRestaurants(db *sql.DB, limit int) {
-	sqlStatement := `
-SELECT *
-FROM restaurants
-LIMIT $1;`
-
-	rows, err := db.Query(sqlStatement, limit)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
-
-	fmt.Println("rows", rows)
-
-	for rows.Next() {
-		var restaurant Restaurant
-		err = rows.Scan(&restaurant.ID, &restaurant.Name)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println(restaurant)
-	}
-
-	err = rows.Err()
-	if err != nil {
 		panic(err)
 	}
 }
