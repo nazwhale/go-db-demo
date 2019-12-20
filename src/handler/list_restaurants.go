@@ -13,10 +13,21 @@ type Restaurant struct {
 }
 
 func HandleListRestaurants(writer http.ResponseWriter, request *http.Request) {
-	db, err := dbInit()
+	connectionURL := os.Getenv("DATABASE_URL")
+
+	// see if we can pass through one big database connection string
+	db, err := sql.Open("postgres", connectionURL)
 	if err != nil {
 		panic(err)
 	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Successfully connected!")
 
 	restaurants := listRestaurants(db, 10)
 	for _, restaurant := range restaurants {
@@ -24,25 +35,6 @@ func HandleListRestaurants(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	_, _ = fmt.Fprintf(writer, "Restaurants listed!")
-}
-
-func dbInit() (*sql.DB, error) {
-	connectionURL := os.Getenv("DATABASE_URL")
-
-	// see if we can pass through one big database connection string
-	db, err := sql.Open("postgres", connectionURL)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println("Successfully connected!")
-	return db, nil
 }
 
 func listRestaurants(db *sql.DB, limit int) []Restaurant {
