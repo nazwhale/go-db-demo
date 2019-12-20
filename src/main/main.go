@@ -3,44 +3,28 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/lib/pq"
 	"log"
 	"net/http"
 	"os"
 
 	_ "github.com/lib/pq"
-)
-
-
-const (
-host   = "localhost"
-port   = 5432
-user   = "naz"
-password = "cabbages"
-dbname = "london-restaurants"
-connectionStr =	"postgres://naz:cabbages@localhost:5432/london-restaurants?sslmode=disable"
-
+	"github.com/personal-projects/postgres-play/src/handler"
 )
 
 func main() {
-	http.HandleFunc("/", handler)
 
-	fmt.Println("listening...")
+	http.HandleFunc("/", handler.HandleRoot)
+	http.HandleFunc("/restaurants/list", handler.HandleListRestaurants)
+
 	err := http.ListenAndServe(GetPort(), nil)
 	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
+		log.Fatal("ListenAndServe error: ", err)
 	}
-
-	dbInit()
 }
 
 
-func dbInit()  {
+func DbInit() *sql.DB {
 	connectionURL := os.Getenv("DATABASE_URL")
-	parsed, err := pq.ParseURL(connectionURL)
-	fmt.Println(connectionURL)
-	fmt.Println(err)
-	fmt.Println(parsed)
 
 	// see if we can pass through one big database connection string
 	db, err := sql.Open("postgres", connectionURL)
@@ -57,15 +41,12 @@ func dbInit()  {
 	listRestaurants(db,10)
 
 	fmt.Println("Successfully connected!")
-	return
+	return db
 }
 
 
 // ------------------------
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	_, _ = fmt.Fprintf(w, "Hello. This is our first Go web app on Heroku!")
-}
 
 // Get the Port from the environment so we can run on Heroku
 func GetPort() string {
