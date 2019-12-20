@@ -31,7 +31,7 @@ func HandleListRestaurants(writer http.ResponseWriter, request *http.Request) {
 
 	restaurants := listRestaurants(db, 10)
 	for _, restaurant := range restaurants {
-		fmt.Sprintf( "%v", restaurant.Name)
+		_, _ = fmt.Fprintf(writer, "%v", restaurant.Name)
 	}
 
 	_, _ = fmt.Fprintf(writer, "Restaurants listed!")
