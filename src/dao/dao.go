@@ -14,13 +14,27 @@ type Restaurant struct {
 func ListRestaurants(limit int) ([]Restaurant, error) {
 	connectionURL := os.Getenv("DATABASE_URL")
 
+	_ = fmt.Sprintf("connection url: %v", connectionURL)
+
 	db, err := sql.Open("postgres", connectionURL)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	return listRestaurants(db, 10), nil
+	return listRestaurants(db, limit), nil
+}
+
+func CreateRestaurant(name string) (*Restaurant, error) {
+	connectionURL := os.Getenv("DATABASE_URL")
+
+	db, err := sql.Open("postgres", connectionURL)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	return createRestaurant(db, name), nil
 }
 
 func listRestaurants(db *sql.DB, limit int) []Restaurant {
@@ -110,17 +124,17 @@ WHERE id = $1;`
 	fmt.Println("rows affected: ", count)
 }
 
-func createRestaurant(db *sql.DB, name string) {
+func createRestaurant(db *sql.DB, name string) *Restaurant {
 	sqlStatement := `
 INSERT INTO restaurants (name)
 VALUES ($1)
 RETURNING id`
 
 	var restaurant Restaurant
-	err := db.QueryRow(sqlStatement, name).Scan(&restaurant.ID)
+	err := db.QueryRow(sqlStatement, name).Scan(&restaurant.Name)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("New record:", restaurant)
+	return &restaurant
 }
