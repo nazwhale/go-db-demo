@@ -15,6 +15,8 @@ func HandleCreateRestaurant(w http.ResponseWriter, r *http.Request) {
 	// Decode() returning a "http: r body too large" error.
 	r.Body = http.MaxBytesReader(w, r.Body, 1048576)
 
+	fmt.Fprintf(w, "req body: %v", r.Body)
+
 	// Setup the decoder and call the DisallowUnknownFields() method on it.
 	// This will cause Decode() to return a "json: unknown field ..." error
 	// if it encounters any extra unexpected fields in the JSON. Strictly
@@ -25,6 +27,10 @@ func HandleCreateRestaurant(w http.ResponseWriter, r *http.Request) {
 
 	var restaurant dao.Restaurant
 	err := decoder.Decode(&restaurant)
+
+	fmt.Fprintf(w, "restaurant: %+v", restaurant)
+	fmt.Fprintf(w, "restaurant without field names: %v", restaurant)
+
 	if err != nil {
 		switch {
 		// Catch the error caused by extra unexpected fields in the r
