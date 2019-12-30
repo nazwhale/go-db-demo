@@ -64,10 +64,6 @@ func HandleCreateRestaurant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "restaurant: %+v", restaurant)
-	fmt.Fprintf(w, "restaurant without field names: %v", restaurant)
-	fmt.Fprintf(w, "restaurant name: %v", restaurant.Name)
-
 	newRestaurantID, err := dao.CreateRestaurant(restaurant.Name)
 	if err != nil {
 		panic(err)

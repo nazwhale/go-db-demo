@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+// should this have an id?
+// cos when we initially decode it, the id will be the null value (0)
+// is that cool?
 type Restaurant struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
