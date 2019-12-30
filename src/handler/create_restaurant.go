@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/personal-projects/postgres-play/src/dao"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -12,13 +13,21 @@ func HandleCreateRestaurant(writer http.ResponseWriter, request *http.Request) {
 	// return the string response containing the request body
 	reqBody, _ := ioutil.ReadAll(request.Body)
 
-	var restaurant dao.Restaurant
-	json.Unmarshal(reqBody, &restaurant)
+	log.Printf("reqbody: %v", reqBody)
 
-	newRestaurant, err := dao.CreateRestaurant(restaurant.Name)
+	var restaurant dao.Restaurant
+	err := json.Unmarshal(reqBody, &restaurant)
 	if err != nil {
 		panic(err)
 	}
 
-	json.NewEncoder(writer).Encode(newRestaurant)
+	log.Printf("restaurant: %v", restaurant)
+	log.Printf("restaurant name: %v", restaurant.Name)
+
+	newRestaurantID, err := dao.CreateRestaurant(restaurant.Name)
+	if err != nil {
+		panic(err)
+	}
+
+	json.NewEncoder(writer).Encode(newRestaurantID)
 }

@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd02ad2c-f305-430a-bfe9-60b40e9f2b09" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/handler/create_restaurant.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dao/dao.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/dao/dao.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/handler/create_restaurant.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/handler/create_restaurant.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/handler/list_restaurants.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/handler/list_restaurants.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -25,12 +25,12 @@ func ListRestaurants(limit int) ([]Restaurant, error) {
 	return listRestaurants(db, limit), nil
 }
 
-func CreateRestaurant(name string) (*Restaurant, error) {
+func CreateRestaurant(name string) (int, error) {
 	connectionURL := os.Getenv("DATABASE_URL")
 
 	db, err := sql.Open("postgres", connectionURL)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	defer db.Close()
 
@@ -124,17 +124,17 @@ WHERE id = $1;`
 	fmt.Println("rows affected: ", count)
 }
 
-func createRestaurant(db *sql.DB, name string) *Restaurant {
+func createRestaurant(db *sql.DB, name string) int {
 	sqlStatement := `
 INSERT INTO restaurants (name)
 VALUES ($1)
 RETURNING id`
+	id := 0
 
-	var restaurant Restaurant
-	err := db.QueryRow(sqlStatement, name).Scan(&restaurant.Name)
+	err := db.QueryRow(sqlStatement, name).Scan(&id)
 	if err != nil {
 		panic(err)
 	}
 
-	return &restaurant
+	return id
 }
