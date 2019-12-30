@@ -27,4 +27,3 @@ func HandleGetRestaurant(writer http.ResponseWriter, request *http.Request) {
 		}
 	}
 }
-

@@ -7,8 +7,8 @@ import (
 )
 
 type Restaurant struct {
-	ID       int
-	Name     string
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 func ListRestaurants(limit int) ([]Restaurant, error) {
@@ -67,7 +67,6 @@ LIMIT $1;`
 	return restaurants
 }
 
-
 func readRestaurant(db *sql.DB, restaurantID int) {
 	sqlStatement := `
 SELECT *
@@ -85,7 +84,6 @@ WHERE id = $1;`
 		panic(err)
 	}
 }
-
 
 func updateRestaurant(db *sql.DB) {
 	sqlStatement := `

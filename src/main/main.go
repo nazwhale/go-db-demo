@@ -23,7 +23,6 @@ func handleRequests() {
 	router.HandleFunc("/restaurant/create", handler.HandleCreateRestaurant).Methods("POST")
 	router.HandleFunc("/restaurant/{id}", handler.HandleGetRestaurant)
 
-
 	err := http.ListenAndServe(getPort(), router)
 	if err != nil {
 		log.Fatal("ListenAndServe error: ", err)
