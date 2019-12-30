@@ -3,24 +3,18 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	//"github.com/personal-projects/postgres-play/src/dao"
+	"github.com/personal-projects/postgres-play/src/dao"
 	"log"
 	"net/http"
 	"strings"
 )
 
-type Person struct {
-	Name string
-	Age  int
-}
 
 func HandleCreateRestaurant(w http.ResponseWriter, r *http.Request) {
 	// Use http.MaxBytesReader to enforce a maximum read of 1MB from the
 	// response body. A r body larger than that will now result in
 	// Decode() returning a "http: r body too large" error.
 	r.Body = http.MaxBytesReader(w, r.Body, 1048576)
-
-	fmt.Fprintf(w, "req body: %v", r.Body)
 
 	// Setup the decoder and call the DisallowUnknownFields() method on it.
 	// This will cause Decode() to return a "json: unknown field ..." error
@@ -30,14 +24,10 @@ func HandleCreateRestaurant(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 
-	//var restaurant dao.Restaurant
-	//err := decoder.Decode(&restaurant)
+	var restaurant dao.Restaurant
+	err := decoder.Decode(&restaurant)
 
-	var p Person
-	err := decoder.Decode(&p)
-
-
-	fmt.Fprintf(w, "person: %+v", p)
+	fmt.Fprintf(w, "restaurant: %+v", restaurant)
 
 	if err != nil {
 		switch {
@@ -74,14 +64,14 @@ func HandleCreateRestaurant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//fmt.Fprintf(w, "restaurant: %+v", restaurant)
-	//fmt.Fprintf(w, "restaurant without field names: %v", restaurant)
-	//fmt.Fprintf(w, "restaurant name: %v", restaurant.Name)
-	//
-	//newRestaurantID, err := dao.CreateRestaurant(restaurant.Name)
-	//if err != nil {
-	//	panic(err)
-	//}
+	fmt.Fprintf(w, "restaurant: %+v", restaurant)
+	fmt.Fprintf(w, "restaurant without field names: %v", restaurant)
+	fmt.Fprintf(w, "restaurant name: %v", restaurant.Name)
 
-	//json.NewEncoder(w).Encode(newRestaurantID)
+	newRestaurantID, err := dao.CreateRestaurant(restaurant.Name)
+	if err != nil {
+		panic(err)
+	}
+
+	json.NewEncoder(w).Encode(newRestaurantID)
 }
